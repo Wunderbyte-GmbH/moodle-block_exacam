@@ -18,7 +18,7 @@
 // This copyright notice MUST APPEAR in all copies of the script!
 
 // shown in admin plugin list
-$string['pluginname'] = 'DUK Quiz Webcam Plugin';
+$string['pluginname'] = 'Exabis Quiz Webcam Plugin';
 // shown in block title and all headers
 $string['blocktitle'] = 'Quiz Webcam';
 $string['exacomp:addinstance'] = 'Add a Webcam Plugin block';

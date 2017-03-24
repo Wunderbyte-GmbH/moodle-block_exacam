@@ -47,7 +47,7 @@ class block_exacam_footer {
 */
 
 call_user_func(function() {
-	global $CFG, $PAGE;
+	global $CFG, $DB, $PAGE;
 
 	$wwwroot = preg_replace('!^[^/]+://[^/]+!', '', $CFG->wwwroot);
 	$self = str_replace($wwwroot, '', $_SERVER['PHP_SELF']);
@@ -61,42 +61,71 @@ call_user_func(function() {
 			$PAGE->requires->js('/blocks/exacam/js/exacam.js');
 		}
 
-		register_shutdown_function(function() {
-			?>
-			<script>
-				window.exacam_config = {
-					active: true,
-					is_teacher: <?=json_encode(block_exacam_is_teacher())?>,
-				};
-			</script>
-			<?php
-		});
+		if ($self == '/mod/quiz/view.php') {
+			$id = optional_param('id', 0, PARAM_INT); // Course Module ID, or ...
+			$q = optional_param('q', 0, PARAM_INT);  // Quiz ID.
 
-		if ($self == '/mod/quiz/view.php' && !block_exacam_is_teacher()) {
+			if ($id) {
+				if (!$cm = get_coursemodule_from_id('quiz', $id)) {
+					print_error('invalidcoursemodule');
+				}
+				//if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
+				//	print_error('coursemisconf');
+				//}
+			} else {
+				if (!$quiz = $DB->get_record('quiz', array('id' => $q))) {
+					print_error('invalidquizid', 'quiz');
+				}
+				if (!$course = $DB->get_record('course', array('id' => $quiz->course))) {
+					print_error('invalidcourseid');
+				}
+				if (!$cm = get_coursemodule_from_instance("quiz", $quiz->id, $course->id)) {
+					print_error('invalidcoursemodule');
+				}
+			}
+
+			if (!block_exacam_cmid_is_active($cm)) {
+				return;
+			}
+
 			// auf der quiz-start seite:
 			// starten nur erlauben, wenn js aktiv ist
 			ob_start(function($output) {
 				$output = str_replace('</head>',
 					'<style>
-						form[action*="startattempt.php"]{
-							display: none;
-						}
-						.jsenabled form[action*="startattempt.php"]{
-							display: block;
-						}
-						.jsenabled #exacam-jsnotice {
-							display: none;
-						}
-					</style></head>', $output);
+							form[action*="startattempt.php"]{
+								display: none;
+							}
+							.jsenabled form[action*="startattempt.php"]{
+								display: block;
+							}
+							.jsenabled #exacam-jsnotice {
+								display: none;
+							}
+						</style></head>', $output);
 
 				$jsnotice = '<div id="exacam-jsnotice">Bitte aktivieren Sie JavaScript</div>';
 				$output = preg_replace('!<form.{0,200}startattempt\.php!', $jsnotice.'$0', $output);
 
 				return $output;
 			});
+
+			block_exacam_print_config();
 		}
 
-		if ($self == '/mod/quiz/attempt.php' && !block_exacam_is_teacher()) {
+		if ($self == '/mod/quiz/attempt.php') {
+			$attemptid = optional_param('attempt', 0, PARAM_INT);
+			if (!$attemptid) {
+				return;
+			}
+
+			require_once($CFG->dirroot . '/mod/quiz/locallib.php');
+			$attemptobj = quiz_attempt::create($attemptid);
+
+			if (!block_exacam_cmid_is_active($attemptobj->get_cm())) {
+				return;
+			}
+
 			// während dem quiz:
 			// page-content nur zeigen, wenn js aktiv ist
 			ob_start(function($output) {
@@ -112,6 +141,8 @@ call_user_func(function() {
 
 				return $output;
 			});
+
+			block_exacam_print_config();
 		}
 	}
 });

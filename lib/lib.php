@@ -39,3 +39,21 @@ function block_exacam_is_teacher($context = null) {
 
 	return has_capability('mod/quiz:addinstance', $context);
 }
+
+function block_exacam_cmid_is_active($cmid) {
+	// TODO
+	return true;
+}
+
+function block_exacam_print_config() {
+	register_shutdown_function(function() {
+		?>
+		<script>
+			window.exacam_config = {
+				active: true,
+				is_teacher: <?=json_encode(block_exacam_is_teacher())?>,
+			};
+		</script>
+		<?php
+	});
+}

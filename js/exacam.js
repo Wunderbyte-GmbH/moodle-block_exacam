@@ -98,26 +98,26 @@
 		}
 	};
 
-	$(document).on('submit', 'form[action*="startattempt.php"]', function (e) {
-		e.preventDefault();
-
-		var form = this;
-		var popup;
-
-		window.exacam_webcamtest_finished = function () {
-			popup.justHide();
-			form.submit();
-		};
-
-		popup = block_exacam.popup_iframe({
-			url: M.cfg.wwwroot + '/blocks/exacam/quizstart.php?cmid=' + block_exacam.get_param('id')
-		});
-	});
-
 	$(function () {
 		if (!window.exacam_config || !window.exacam_config.active) {
 			return;
 		}
+
+		$(document).on('submit', 'form[action*="startattempt.php"]', function (e) {
+			e.preventDefault();
+
+			var form = this;
+			var popup;
+
+			window.exacam_webcamtest_finished = function () {
+				popup.justHide();
+				form.submit();
+			};
+
+			popup = block_exacam.popup_iframe({
+				url: M.cfg.wwwroot + '/blocks/exacam/quizstart.php?cmid=' + block_exacam.get_param('id')
+			});
+		});
 
 		if ($('body#page-mod-quiz-attempt').length) {
 			var layer = $('<div><b>Webcam Status:</b>'

@@ -20,8 +20,8 @@
 return [
 	// shown in admin plugin list
 	'pluginname' => [
-		'DUK Quiz Webcam Plugin',
-		'DUK Quiz Webcam Plugin',
+		'Exabis Quiz Webcam Plugin',
+		'Exabis Quiz Webcam Plugin',
 	],
 	// shown in block title and all headers
 	'blocktitle' => [
