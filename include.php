@@ -106,6 +106,7 @@ call_user_func(function() {
 
 				$jsnotice = '<div id="exacam-jsnotice">Bitte aktivieren Sie JavaScript</div>';
 				$output = preg_replace('!<form.{0,200}startattempt\.php!', $jsnotice.'$0', $output);
+				// $output = preg_replace('!(<form.{0,200}startattempt\.php.*)"submit"!U', '$1"button"', $output);
 
 				return $output;
 			});
@@ -133,9 +134,6 @@ call_user_func(function() {
 					'<style>
 						#page-content{
 							display: none;
-						}
-						.jsenabled #page-content{
-							display: block;
 						}
 					</style></head>', $output);
 

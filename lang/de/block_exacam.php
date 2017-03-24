@@ -21,6 +21,6 @@
 $string['pluginname'] = 'Exabis Quiz Webcam Plugin';
 // shown in block title and all headers
 $string['blocktitle'] = 'Quiz Webcam';
-$string['exacomp:addinstance'] = 'Webcam Plugin auf Kursseite anlegen';
-$string['exacomp:myaddinstance'] = 'Webcam Plugin auf Startseite anlegen';
-$string['exacomp:use'] = 'Nutzung';
+$string['exacam:addinstance'] = 'Webcam Plugin auf Kursseite anlegen';
+$string['exacam:myaddinstance'] = 'Webcam Plugin auf Startseite anlegen';
+$string['exacam:use'] = 'Nutzung';

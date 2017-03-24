@@ -51,7 +51,7 @@ if ($userid && $quizid) {
 	echo '<h2>Quiz '.$quiz->name.' / Benutzer '.fullname($user).'</h2>';
 
 	$fs = get_file_storage();
-	$files = $fs->get_area_files(context_module::instance($quiz->id)->id, 'block_exacam', 'quizshot', $userid, 'timemodified DESC');
+	$files = $fs->get_area_files(context_module::instance($quiz->id)->id, 'block_exacam', 'quizshot', $userid, 'timemodified DESC', false);
 
 	echo '<div>';
 	?>

@@ -28,15 +28,15 @@ return [
 		'Quiz Webcam',
 		'Quiz Webcam',
 	],
-	'exacomp:addinstance' => [
+	'exacam:addinstance' => [
 		'Webcam Plugin auf Kursseite anlegen',
 		'Add a Webcam Plugin block',
 	],
-	'exacomp:myaddinstance' => [
+	'exacam:myaddinstance' => [
 		'Webcam Plugin auf Startseite anlegen',
 		'Add a Webcam Plugin block to my moodle',
 	],
-	'exacomp:use' => [
+	'exacam:use' => [
 		'Nutzung',
 		'use Webcam Plugin',
 	],

@@ -141,13 +141,16 @@
 				dest_width: 640,
 				dest_height: 480,
 				image_format: 'jpeg',
-				jpeg_quality: 85
+				jpeg_quality: 85,
+				swfURL: M.cfg.wwwroot + '/blocks/exacam/js/webcam.swf',
 			});
 			Webcam.attach('#my_camera');
 
 			Webcam.on('live', function () {
 				// camera is live, showing preview image
 				// (and user has allowed access)
+
+				$('#page-content').show();
 
 				function snap() {
 					console.log('snap');

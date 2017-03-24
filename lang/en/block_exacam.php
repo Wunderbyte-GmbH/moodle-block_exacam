@@ -21,6 +21,6 @@
 $string['pluginname'] = 'Exabis Quiz Webcam Plugin';
 // shown in block title and all headers
 $string['blocktitle'] = 'Quiz Webcam';
-$string['exacomp:addinstance'] = 'Add a Webcam Plugin block';
-$string['exacomp:myaddinstance'] = 'Add a Webcam Plugin block to my moodle';
-$string['exacomp:use'] = 'use Webcam Plugin';
+$string['exacam:addinstance'] = 'Add a Webcam Plugin block';
+$string['exacam:myaddinstance'] = 'Add a Webcam Plugin block to my moodle';
+$string['exacam:use'] = 'use Webcam Plugin';
