@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/common.php';
 
-function block_dukcam_get_context_from_courseid($courseid) {
+function block_exacam_get_context_from_courseid($courseid) {
 	global $COURSE;
 
 	if ($courseid instanceof context) {
@@ -17,8 +17,8 @@ function block_dukcam_get_context_from_courseid($courseid) {
 	}
 }
 
-function block_dukcam_is_teacher($context = null) {
-	$context = block_dukcam_get_context_from_courseid($context);
+function block_exacam_is_teacher($context = null) {
+	$context = block_exacam_get_context_from_courseid($context);
 
 	return has_capability('mod/quiz:addinstance', $context);
 }

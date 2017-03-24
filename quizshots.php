@@ -9,11 +9,11 @@ $context = context_course::instance($courseid);
 
 require_login($course);
 
-if (!block_dukcam_is_teacher()) {
+if (!block_exacam_is_teacher()) {
 	throw new moodle_exception('no teacher');
 }
 
-$PAGE->set_url('/blocks/dukcam/quizstart.php', array('courseid' => $courseid));
+$PAGE->set_url('/blocks/exacam/quizstart.php', array('courseid' => $courseid));
 $PAGE->set_heading('');
 
 echo $OUTPUT->header();
@@ -34,18 +34,18 @@ if ($userid && $quizid) {
 	echo '<h2>Quiz '.$quiz->name.' / Benutzer '.fullname($user).'</h2>';
 
 	$fs = get_file_storage();
-	$files = $fs->get_area_files(context_module::instance($quiz->id)->id, 'block_dukcam', 'quizshot', $userid, 'timemodified DESC');
+	$files = $fs->get_area_files(context_module::instance($quiz->id)->id, 'block_exacam', 'quizshot', $userid, 'timemodified DESC');
 
 	echo '<div>';
 	?>
 	<style>
-		.dukcam-img {
+		.exacam-img {
 			float: left;
 			padding: 5px;
 			margin: 5px;
 			border: 1px solid black;
 		}
-		.dukcam-img span {
+		.exacam-img span {
 			display: block;
 			text-align: center;
 			margin: 3px 0 -3px 0;
@@ -56,7 +56,7 @@ if ($userid && $quizid) {
 
 		$imageurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
 		$img = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => ''));
-		echo '<div class="dukcam-img"><div>'.$img.'</div><span>'.userdate($file->get_timemodified()).'</span></div>';
+		echo '<div class="exacam-img"><div>'.$img.'</div><span>'.userdate($file->get_timemodified()).'</span></div>';
 	}
 	echo '</div>';
 } else {
@@ -69,7 +69,7 @@ if ($userid && $quizid) {
 			WHERE u.id IN (
 				SELECT DISTINCT userid
 				FROM {files}
-				WHERE component='block_dukcam' AND filearea='quizshot' AND filename<>'.'
+				WHERE component='block_exacam' AND filearea='quizshot' AND filename<>'.'
 				AND contextid = ?
 			)
 		", [context_module::instance($quiz->id)->id]);

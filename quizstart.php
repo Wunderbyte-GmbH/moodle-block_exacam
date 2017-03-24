@@ -2,14 +2,19 @@
 
 require __DIR__.'/inc.php';
 
-$courseid = required_param('courseid', PARAM_INT);
+$cmid = required_param('cmid', PARAM_INT);
 
-$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-$context = context_course::instance($courseid);
+if (!$cm = get_coursemodule_from_id('quiz', $cmid)) {
+	print_error('invalidcoursemodule');
+}
+if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
+	print_error('coursemisconf');
+}
+$context = context_course::instance($course->id);
 
 require_login($course);
 
-$PAGE->set_url('/blocks/dukcam/quizstart.php', array('courseid' => $courseid));
+$PAGE->set_url('/blocks/exacam/quizstart.php', array('courseid' => $course->id));
 $PAGE->set_heading('');
 $PAGE->set_pagelayout('embedded');
 
@@ -34,28 +39,56 @@ echo $OUTPUT->header();
 			});
 			Webcam.attach('#my_camera');
 
+			function webcam_error(err) {
+				$('#exacam-error').html('Fehler: ' + err);
+			}
+
+			Webcam.on('error', function (err) {
+				webcam_error(err);
+			});
+
+			Webcam.on('live', function (err) {
+				$('#submit').show();
+			});
+
 			$('#submit').click(function () {
 				Webcam.snap(function (data_uri) {
 					// snap complete, image data is in 'data_uri'
 
-					Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/dukcam/upload.php?cmid='+block_dukcam.body_param('cmid'), function (code, text) {
+					Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/exacam/upload.php?cmid=' + block_exacam.get_param('cmid'), function (code, text) {
 						// Upload complete!
 						// 'code' will be the HTTP response code from the server, e.g. 200
 						// 'text' will be the raw response content
-						parent.dukcam_webcamtest_finished();
+
+						if (code != 200) {
+							return webcam_error('Fehler beim speichern des Webcam Bildes');
+						}
+
+						console.log(text);
+						if (text !== 'ok') {
+							if (text.match(/\n/)) {
+								return webcam_error('Unbekannter fehler');
+							} else {
+								return webcam_error(text);
+							}
+						}
+
+						parent.exacam_webcamtest_finished();
 					});
 				});
 			});
 		});
 	</script>
 
-	<center>
+	<center id="exacam-content">
 		<h3>Webcamtest</h3>
 		<div>Wenn Sie eine Webcam besitzen sollten sie unten das aktuelle Webcambild sehen.<br/>
 			Bitte prüfen Sie, ob Ihr Gesicht auch erkennbar ist.
 		</div>
 		<div id="my_camera"></div>
-		<input type=button value="Ich sehe mich selbst" id="submit">
+
+		<input type=button value="Ich sehe mich selbst" id="submit" style="display: none;">
+		<div id="exacam-error" style="color: red; font-weight: bold;"></div>
 	</center>
 <?php
 

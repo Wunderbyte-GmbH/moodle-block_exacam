@@ -17,7 +17,7 @@
 //
 // This copyright notice MUST APPEAR in all copies of the script!
 
-namespace block_dukcam\common {
+namespace block_exacam\common {
 
 	defined('MOODLE_INTERNAL') || die();
 
@@ -696,7 +696,7 @@ namespace block_dukcam\common {
  * exporting all classes and functions from the common namespace to the plugin namespace
  * the whole part below is done, so eclipse knows the common classes and functions
  */
-namespace block_dukcam {
+namespace block_exacam {
 
 	function _should_export_class($classname) {
 		return !class_exists(__NAMESPACE__.'\\'.$classname);
@@ -757,7 +757,7 @@ namespace block_dukcam {
 }
 
 namespace {
-	function _block_dukcam_export_function($function) {
+	function _block_exacam_export_function($function) {
 		$type = basename(dirname(dirname(__DIR__)));
 		if ($type == 'blocks') {
 			$type = 'block';
@@ -775,16 +775,16 @@ namespace {
 		return false;
 	}
 
-	if (_block_dukcam_export_function('get_string')) {
-		function block_dukcam_get_string($identifier, $component = null, $a = null) {
+	if (_block_exacam_export_function('get_string')) {
+		function block_exacam_get_string($identifier, $component = null, $a = null) {
 		}
 	}
-	if (_block_dukcam_export_function('print_error')) {
-		function block_dukcam_print_error($errorcode, $module = 'error', $link = '', $a = null, $debuginfo = null) {
+	if (_block_exacam_export_function('print_error')) {
+		function block_exacam_print_error($errorcode, $module = 'error', $link = '', $a = null, $debuginfo = null) {
 		}
 	}
-	if (_block_dukcam_export_function('trans')) {
-		function block_dukcam_trans() {
+	if (_block_exacam_export_function('trans')) {
+		function block_exacam_trans() {
 		}
 	}
 }
