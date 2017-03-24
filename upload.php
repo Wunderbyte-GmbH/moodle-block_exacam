@@ -6,8 +6,8 @@ require_login();
 
 $filerecord = new stdClass();
 $filerecord->contextid = context_module::instance(required_param('cmid', PARAM_INT))->id;
-$filerecord->component = 'block_dukquiz';
-$filerecord->filearea = 'quizshots';
+$filerecord->component = 'block_dukcam';
+$filerecord->filearea = 'quizshot';
 $filerecord->filepath = '/';
 $filerecord->filename = time().'.jpg';
 $filerecord->itemid = $USER->id;

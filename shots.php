@@ -4,17 +4,15 @@ require __DIR__.'/inc.php';
 
 $courseid = required_param('courseid', PARAM_INT);
 
-if (!$course = $DB->get_record('course', array('id' => $courseid))) {
-	print_error('invalidcourse', 'block_exacomp', $courseid);
-}
+$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+$context = context_course::instance($courseid);
 
 require_login($course);
 
-$context = context_course::instance($courseid);
 
 require_capability('moodle/grade:viewall', $context);
 
-$PAGE->set_url('/blocks/dukquiz/quizstart.php', array('courseid' => $courseid));
+$PAGE->set_url('/blocks/dukcam/quizstart.php', array('courseid' => $courseid));
 $PAGE->set_heading('');
 
 echo $OUTPUT->header();
@@ -35,7 +33,7 @@ if ($userid && $quizid) {
 	echo '<h2>Quiz '.$quiz->name.' / Benutzer '.fullname($user).'</h2>';
 
 	$fs = get_file_storage();
-	$files = $fs->get_area_files(context_module::instance($quiz->id)->id, 'block_dukquiz', 'quizshots', $userid, 'timemodified DESC');
+	$files = $fs->get_area_files(context_module::instance($quiz->id)->id, 'block_dukcam', 'quizshot', $userid, 'timemodified DESC');
 
 	echo '<table>';
 	foreach ($files as $file) {
@@ -52,7 +50,7 @@ if ($userid && $quizid) {
 			WHERE u.id IN (
 				SELECT DISTINCT userid
 				FROM {files}
-				WHERE component='block_dukquiz' AND filearea='quizshots' AND filename<>'.'
+				WHERE component='block_dukcam' AND filearea='quizshot' AND filename<>'.'
 				AND contextid = ?
 			)
 		", [context_module::instance($quiz->id)->id]);

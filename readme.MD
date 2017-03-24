@@ -1,2 +1,2 @@
 
-require __DIR__.'/blocks/dukquiz/include.php';
+require __DIR__.'/blocks/dukcam/include.php';

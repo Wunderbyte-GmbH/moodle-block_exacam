@@ -1,6 +1,6 @@
 !function () {
 
-	var block_dukquiz = window.block_dukquiz = {
+	var block_dukcam = window.block_dukcam = {
 		popup_iframe: function (config) {
 
 			// allow passing of an url
@@ -76,13 +76,13 @@
 		var form = this;
 		var popup;
 
-		window.dukquiz_webcamtest_finished = function () {
+		window.dukcam_webcamtest_finished = function () {
 			popup.justHide();
 			form.submit();
 		};
 
-		popup = block_dukquiz.popup_iframe({
-			url: M.cfg.wwwroot + '/blocks/dukquiz/quizstart.php?courseid=' + block_dukquiz.body_param('course')
+		popup = block_dukcam.popup_iframe({
+			url: M.cfg.wwwroot + '/blocks/dukcam/quizstart.php?courseid=' + block_dukcam.body_param('course')
 		});
 	});
 
@@ -112,7 +112,7 @@
 						// snap complete, image data is in 'data_uri'
 
 						console.log('upload');
-						Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/dukquiz/upload.php?cmid=' + block_dukquiz.body_param('cmid'), function (code, text) {
+						Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/dukcam/upload.php?cmid=' + block_dukcam.body_param('cmid'), function (code, text) {
 							console.log('ok');
 							// Upload complete!
 							// 'code' will be the HTTP response code from the server, e.g. 200
