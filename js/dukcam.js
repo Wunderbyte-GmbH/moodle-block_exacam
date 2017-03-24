@@ -87,44 +87,74 @@
 	});
 
 	$(function () {
+		if (!window.dukcam_config || !window.dukcam_config.active) {
+			return;
+		}
+
 		if ($('body#page-mod-quiz-attempt').length) {
 			var layer = $('<div id="my_camera" style="position: fixed; top: 0; right: 0; width: 100px; height: 100px; border: 1px solid black; background: white; z-index: 100000"></div>');
-
 			layer.appendTo('body');
 
-			Webcam.set({
-				width: 100,
-				height: 100,
-				dest_width: 640,
-				dest_height: 480,
-				image_format: 'jpeg',
-				jpeg_quality: 85
-			});
-			Webcam.attach('#my_camera');
+			if (false && window.dukcam_config.is_teacher) {
+				layer.html('Webcam ist aktiv');
+			} else {
+				var interval;
 
-			Webcam.on('live', function () {
-				// camera is live, showing preview image
-				// (and user has allowed access)
-
-				function snap() {
-					console.log('snap');
-					Webcam.snap(function (data_uri) {
-						// snap complete, image data is in 'data_uri'
-
-						console.log('upload');
-						Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/dukcam/upload.php?cmid=' + block_dukcam.body_param('cmid'), function (code, text) {
-							console.log('ok');
-							// Upload complete!
-							// 'code' will be the HTTP response code from the server, e.g. 200
-							// 'text' will be the raw response content
-						});
-
-					});
+				function webcam_error(err) {
+					window.clearInterval(interval);
+					alert(err);
+					window.location.href = M.cfg.wwwroot + '/course/view.php?id=' + block_dukcam.body_param('course');
 				}
 
-				snap();
-				window.setInterval(snap, 10000);
-			});
+				Webcam.set({
+					width: 100,
+					height: 100,
+					dest_width: 640,
+					dest_height: 480,
+					image_format: 'jpeg',
+					jpeg_quality: 85
+				});
+				Webcam.attach('#my_camera');
+
+				Webcam.on('live', function () {
+					// camera is live, showing preview image
+					// (and user has allowed access)
+
+					function snap() {
+						console.log('snap');
+						Webcam.snap(function (data_uri) {
+							// snap complete, image data is in 'data_uri'
+
+							console.log('upload');
+							Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/dukcam/upload.php?cmid=' + block_dukcam.body_param('cmid'), function (code, text) {
+								// Upload complete!
+								// 'code' will be the HTTP response code from the server, e.g. 200
+								// 'text' will be the raw response content
+
+								if (code != 200) {
+									webcam_error('Fehler beim speichern des Webcam Bildes');
+								}
+
+								if (text !== 'ok') {
+									if (text.match(/\n/)) {
+										webcam_error('Unbekannter fehler');
+									} else {
+										webcam_error(text);
+									}
+								}
+							});
+
+						});
+					}
+
+					interval = window.setInterval(snap, 10000);
+					snap();
+				});
+
+				Webcam.on('error', function (err) {
+					webcam_error(err);
+				});
+			}
 		}
 	});
 }();

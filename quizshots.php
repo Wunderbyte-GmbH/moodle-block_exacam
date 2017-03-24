@@ -9,8 +9,9 @@ $context = context_course::instance($courseid);
 
 require_login($course);
 
-
-require_capability('moodle/grade:viewall', $context);
+if (!block_dukcam_is_teacher()) {
+	throw new moodle_exception('no teacher');
+}
 
 $PAGE->set_url('/blocks/dukcam/quizstart.php', array('courseid' => $courseid));
 $PAGE->set_heading('');
@@ -35,11 +36,29 @@ if ($userid && $quizid) {
 	$fs = get_file_storage();
 	$files = $fs->get_area_files(context_module::instance($quiz->id)->id, 'block_dukcam', 'quizshot', $userid, 'timemodified DESC');
 
-	echo '<table>';
+	echo '<div>';
+	?>
+	<style>
+		.dukcam-img {
+			float: left;
+			padding: 5px;
+			margin: 5px;
+			border: 1px solid black;
+		}
+		.dukcam-img span {
+			display: block;
+			text-align: center;
+			margin: 3px 0 -3px 0;
+		}
+	</style>
+	<?php
 	foreach ($files as $file) {
-		echo '<tr><td>'.userdate($file->get_timemodified()).'</td><td>'.'file</td></tr>';
+
+		$imageurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+		$img = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => ''));
+		echo '<div class="dukcam-img"><div>'.$img.'</div><span>'.userdate($file->get_timemodified()).'</span></div>';
 	}
-	echo '</table>';
+	echo '</div>';
 } else {
 	foreach ($quizzes as $quiz) {
 		echo '<h2>Quiz '.$quiz->name.'</h2>';

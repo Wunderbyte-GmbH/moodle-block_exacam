@@ -4,6 +4,10 @@ require __DIR__.'/inc.php';
 
 require_login();
 
+if (filesize($_FILES['webcam']['tmp_name']) <= 1000) {
+	die('no file');
+}
+
 $filerecord = new stdClass();
 $filerecord->contextid = context_module::instance(required_param('cmid', PARAM_INT))->id;
 $filerecord->component = 'block_dukcam';
