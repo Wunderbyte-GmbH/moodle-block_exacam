@@ -1,4 +1,21 @@
 <?php
+// This file is part of Exabis Quiz Camera
+//
+// (c) 2017 GTN - Global Training Network GmbH <office@gtn-solutions.com>
+//
+// Exabis Competence Grid is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This script is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You can find the GNU General Public License at <http://www.gnu.org/licenses/>.
+//
+// This copyright notice MUST APPEAR in all copies of the script!
 
 require __DIR__.'/inc.php';
 
@@ -82,11 +99,10 @@ echo $OUTPUT->header();
 
 	<center id="exacam-content">
 		<h3>Webcamtest</h3>
-		<div>Wenn Sie eine Webcam besitzen sollten sie unten das aktuelle Webcambild sehen.<br/>
+		<div id="my_camera"></div>
+		<div>Wenn Sie eine Webcam besitzen sollten Sie hier das aktuelle Webcambild sehen.<br/>
 			Bitte prüfen Sie, ob Ihr Gesicht auch erkennbar ist.
 		</div>
-		<div id="my_camera"></div>
-
 		<input type=button value="Ich sehe mich selbst" id="submit" style="display: none;">
 		<div id="exacam-error" style="color: red; font-weight: bold;"></div>
 	</center>
