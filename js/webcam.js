@@ -1026,8 +1026,11 @@ var Webcam = {
 
 Webcam.init();
 
+window.Webcam = Webcam;
+
+/*
 if (typeof define === 'function' && define.amd) {
-	define( function() { return Webcam; } );
+	define(function() { return Webcam; } );
 } 
 else if (typeof module === 'object' && module.exports) {
 	module.exports = Webcam;
@@ -1035,5 +1038,5 @@ else if (typeof module === 'object' && module.exports) {
 else {
 	window.Webcam = Webcam;
 }
-
+*/
 }(window));
