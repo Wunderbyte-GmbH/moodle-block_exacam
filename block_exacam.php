@@ -26,6 +26,10 @@ class block_exacam extends block_list {
 		$this->title = block_exacam_get_string('blocktitle');
 	}
 
+	function applicable_formats() {
+		return array('all' => true, 'mod' => true, 'tag' => false, 'my' => false);
+	}
+
 	function instance_allow_multiple() {
 		return false;
 	}
@@ -46,15 +50,25 @@ class block_exacam extends block_list {
 		$this->content->icons = array();
 		$this->content->footer = '';
 
+		$quizzes = get_coursemodules_in_course('quiz', $this->page->course->id);
+		$quiz = $this->page->cm && isset($quizzes[$this->page->cm->id]) ? $quizzes[$this->page->cm->id] : null;
+
 		if (block_exacam_is_teacher()) {
 			/*
 			$icon = '<img src="'.$OUTPUT->pix_url('i/settings').'" class="icon" alt="" />';
 			$this->content->items[] = '<a href="'.$CFG->wwwroot.'/blocks/exacam/quizshots.php?courseid='.$COURSE->id.'">'.$icon.'Webcambilder anzeigen'.'</a>';
 			*/
 
+			if ($quiz) {
+				$urlExtra = '&quizid='.$quiz->id;
+			} else {
+				$urlExtra = '';
+			}
+
 			$icon = '<img src="'.$OUTPUT->pix_url('i/users').'" class="icon" alt="" />';
-			$this->content->items[] = '<a href="'.$CFG->wwwroot.'/blocks/exacam/quizshots.php?courseid='.$COURSE->id.'">'.$icon.'Webcambilder anzeigen'.'</a>';
+			$this->content->items[] = '<a href="'.$CFG->wwwroot.'/blocks/exacam/quizshots.php?courseid='.$COURSE->id.$urlExtra.'">'.$icon.'Webcambilder anzeigen'.'</a>';
 		}
+
 		return $this->content;
 	}
 }

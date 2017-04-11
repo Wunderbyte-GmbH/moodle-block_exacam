@@ -33,21 +33,25 @@ if (!block_exacam_is_teacher()) {
 $PAGE->set_url('/blocks/exacam/quizstart.php', array('courseid' => $courseid));
 $PAGE->set_heading('');
 
-echo $OUTPUT->header();
-
 $quizzes = get_coursemodules_in_course('quiz', $courseid);
 
 $userid = optional_param('userid', 0, PARAM_INT);
 $quizid = optional_param('quizid', 0, PARAM_INT);
+$quiz = null;
 
-if ($userid && $quizid) {
+if ($quizid) {
 	if (!isset($quizzes[$quizid])) {
 		throw new \Exception('quiz not found');
 	}
 
+	$quiz = $quizzes[$quizid];
+}
+
+echo $OUTPUT->header();
+
+if ($userid && $quiz) {
 	$user = $DB->get_record('user', ['id' => $userid]);
 
-	$quiz = $quizzes[$quizid];
 	echo '<h2>Quiz '.$quiz->name.' / Benutzer '.fullname($user).'</h2>';
 
 	$fs = get_file_storage();
@@ -77,7 +81,13 @@ if ($userid && $quizid) {
 	}
 	echo '</div>';
 } else {
-	foreach ($quizzes as $quiz) {
+	if ($quiz) {
+		// loop one quiz
+		$loop = [$quiz];
+	} else {
+		$loop = $quizzes;
+	}
+	foreach ($loop as $quiz) {
 		echo '<h2>Quiz '.$quiz->name.'</h2>';
 
 		$users = $DB->get_records_sql("

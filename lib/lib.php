@@ -40,19 +40,45 @@ function block_exacam_is_teacher($context = null) {
 	return has_capability('mod/quiz:addinstance', $context);
 }
 
-function block_exacam_cmid_is_active($cmid) {
-	// TODO
-	return true;
+function block_exacam_get_active_cmids() {
+	$active_cmids = trim(get_config('block_exacam', 'active_cmids'), ',');
+	if ($active_cmids) {
+		$active_cmids = explode(',', $active_cmids);
+
+		return array_combine($active_cmids, $active_cmids);
+	} else {
+		return [];
+	}
 }
 
-function block_exacam_print_config() {
-	register_shutdown_function(function() {
+function block_exacam_cmid_is_active($cm) {
+	$active_cmids = block_exacam_get_active_cmids();
+	return in_array($cm->id, $active_cmids);
+}
+
+function block_exacam_set_cmid_active_state($cmid, $active) {
+	$active_cmids = block_exacam_get_active_cmids();
+
+	if ($active) {
+		$active_cmids[$cmid] = $cmid;
+	} else {
+		unset($active_cmids[$cmid]);
+	}
+
+	set_config('active_cmids', join(',', $active_cmids), 'block_exacam');
+}
+
+function block_exacam_print_config($cm) {
+	$config = [
+		'cmid' => $cm->id,
+		'active' => block_exacam_cmid_is_active($cm),
+		'is_teacher' => block_exacam_is_teacher(),
+	];
+
+	register_shutdown_function(function() use ($config) {
 		?>
 		<script>
-			window.exacam_config = {
-				active: true,
-				is_teacher: <?=json_encode(block_exacam_is_teacher())?>,
-			};
+					window.exacam_config = <?=json_encode($config)?>;
 		</script>
 		<?php
 	});

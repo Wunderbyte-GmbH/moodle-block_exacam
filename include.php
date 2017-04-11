@@ -84,6 +84,9 @@ call_user_func(function() {
 				}
 			}
 
+			// config immer ausgeben
+			block_exacam_print_config($cm);
+
 			if (!block_exacam_cmid_is_active($cm)) {
 				return;
 			}
@@ -110,8 +113,6 @@ call_user_func(function() {
 
 				return $output;
 			});
-
-			block_exacam_print_config();
 		}
 
 		if ($self == '/mod/quiz/attempt.php') {
@@ -122,6 +123,9 @@ call_user_func(function() {
 
 			require_once($CFG->dirroot . '/mod/quiz/locallib.php');
 			$attemptobj = quiz_attempt::create($attemptid);
+
+			// config immer ausgeben
+			block_exacam_print_config($attemptobj->get_cm());
 
 			if (!block_exacam_cmid_is_active($attemptobj->get_cm())) {
 				return;
@@ -139,8 +143,6 @@ call_user_func(function() {
 
 				return $output;
 			});
-
-			block_exacam_print_config();
 		}
 	}
 });

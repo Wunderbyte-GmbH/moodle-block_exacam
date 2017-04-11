@@ -17,10 +17,26 @@
 //
 // This copyright notice MUST APPEAR in all copies of the script!
 
-defined('MOODLE_INTERNAL') || die();
+require __DIR__.'/inc.php';
 
-$plugin->component = 'block_exacam';
-$plugin->release = '0.0.1';
-$plugin->version   = 2017041100;
-$plugin->requires  = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
+$cmid = required_param('cmid', PARAM_INT);
+
+if (!$cm = get_coursemodule_from_id('quiz', $cmid)) {
+	print_error('invalidcoursemodule');
+}
+
+if (!$course = $DB->get_record("course", array("id" => $cm->course))) {
+	print_error('coursemisconf');
+}
+
+require_login($course);
+
+if (!block_exacam_is_teacher()) {
+	throw new moodle_exception('no teacher');
+}
+
+$active = required_param('active', PARAM_BOOL);
+
+block_exacam_set_cmid_active_state($cmid, $active);
+
+header("Location: ".required_param('back', PARAM_TEXT));

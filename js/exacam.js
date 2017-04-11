@@ -99,95 +99,126 @@
 	};
 
 	$(function () {
-		if (!window.exacam_config || !window.exacam_config.active) {
+		if (!window.exacam_config) {
 			return;
 		}
 
-		$(document).on('submit', 'form[action*="startattempt.php"]', function (e) {
-			e.preventDefault();
-
-			var form = this;
-			var popup;
-
-			window.exacam_webcamtest_finished = function () {
-				popup.justHide();
-				form.submit();
-			};
-
-			popup = block_exacam.popup_iframe({
-				url: M.cfg.wwwroot + '/blocks/exacam/quizstart.php?cmid=' + block_exacam.get_param('id')
-			});
-		});
-
 		if ($('body#page-mod-quiz-attempt').length) {
-			var layer = $('<div><b>Webcam Status:</b>'
-				+ '<div id="my_camera"></div>'
-				// + (window.exacam_config.is_teacher && 'asdf')
-				+ '</div>');
-			layer.appendTo('div[role="main"]');
+			var $container = $('#mod_quiz_navblock .content');
 
-			var interval;
+			if (window.exacam_config.is_teacher) {
+				var v = window.exacam_config.active ? 'Webcam deaktivieren' : 'Webcam aktivieren';
+				$button = $('<input type="button" value="' + v + '"/>');
+				$container.append($button);
 
-			function webcam_error(err) {
-				window.clearInterval(interval);
-				alert(err);
-				window.location.href = M.cfg.wwwroot + '/mod/quiz/view.php?id=' + block_exacam.body_param('cmid');
-				//window.location.href = M.cfg.wwwroot + '/course/view.php?id=' + block_exacam.body_param('course');
-			}
+				$button.click(function () {
+					document.location.href = M.cfg.wwwroot
+						+ '/blocks/exacam/quiz_set_active.php?action=set_active_state&active=' + (!window.exacam_config.active)
+						+ '&cmid=' + window.exacam_config.cmid
+						+ '&back=' + encodeURI(document.location.href);
+				});
 
-			Webcam.set({
-				width: 100,
-				height: 100,
-				dest_width: 640,
-				dest_height: 480,
-				image_format: 'jpeg',
-				jpeg_quality: 85,
-				swfURL: M.cfg.wwwroot + '/blocks/exacam/js/webcam.swf',
-			});
-			Webcam.attach('#my_camera');
+				if (window.exacam_config.active) {
+					$button = $('<input type="button" value="Bilder anzeigen"/>');
+					$container.append($button);
 
-			Webcam.on('live', function () {
-				// camera is live, showing preview image
-				// (and user has allowed access)
-
-				$('#page-content').show();
-
-				function snap() {
-					console.log('snap');
-					Webcam.snap(function (data_uri) {
-						// snap complete, image data is in 'data_uri'
-
-						console.log('upload');
-						Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/exacam/upload.php?cmid=' + block_exacam.body_param('cmid'), function (code, text) {
-							// Upload complete!
-							// 'code' will be the HTTP response code from the server, e.g. 200
-							// 'text' will be the raw response content
-
-							if (code != 200) {
-								return webcam_error('Fehler beim speichern des Webcam Bildes');
-							}
-
-							if (text !== 'ok') {
-								if (text.match(/\n/)) {
-									return webcam_error('Unbekannter fehler');
-								} else {
-									return webcam_error(text);
-								}
-							}
-						});
-
+					$button.click(function () {
+						document.location.href = M.cfg.wwwroot
+							+ '/blocks/exacam/quizshots.php?courseid=' + block_exacam.body_param('course')
+							+ '&quizid=' + window.exacam_config.cmid;
 					});
 				}
+			}
+			if (window.exacam_config.active) {
+				$container.append('<div class="title">Webcam Status:</div>');
+				$container.append('<div id="my_camera"></div>');
+			}
+		}
 
-				if (!window.exacam_config.is_teacher) {
-					interval = window.setInterval(snap, 2 * 60 * 1000);
-					snap();
+		if (window.exacam_config.active) {
+			// remove all moodle event handlers (eg. popup "dieses quiz hat ein zeitlimit")
+			$('form[action*="startattempt.php"]').html($('form[action*="startattempt.php"]').html());
+
+			$('form[action*="startattempt.php"]').submit(function (e) {
+				e.preventDefault();
+
+				var form = this;
+				var popup;
+
+				window.exacam_webcamtest_finished = function () {
+					popup.justHide();
+					form.submit();
+				};
+
+				popup = block_exacam.popup_iframe({
+					url: M.cfg.wwwroot + '/blocks/exacam/quizstart.php?cmid=' + block_exacam.get_param('id')
+				});
+			});
+
+			if ($('body#page-mod-quiz-attempt').length) {
+				var interval;
+
+				function webcam_error(err) {
+					window.clearInterval(interval);
+					alert(err);
+					window.location.href = M.cfg.wwwroot + '/mod/quiz/view.php?id=' + block_exacam.body_param('cmid');
+					//window.location.href = M.cfg.wwwroot + '/course/view.php?id=' + block_exacam.body_param('course');
 				}
-			});
 
-			Webcam.on('error', function (err) {
-				webcam_error(err);
-			});
+				Webcam.set({
+					width: 100,
+					height: 100,
+					dest_width: 640,
+					dest_height: 480,
+					image_format: 'jpeg',
+					jpeg_quality: 85,
+					swfURL: M.cfg.wwwroot + '/blocks/exacam/js/webcam.swf',
+				});
+				Webcam.attach('#my_camera');
+
+				Webcam.on('live', function () {
+					// camera is live, showing preview image
+					// (and user has allowed access)
+
+					$('#page-content').show();
+
+					function snap() {
+						console.log('snap');
+						Webcam.snap(function (data_uri) {
+							// snap complete, image data is in 'data_uri'
+
+							console.log('upload');
+							Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/exacam/upload.php?cmid=' + block_exacam.body_param('cmid'), function (code, text) {
+								// Upload complete!
+								// 'code' will be the HTTP response code from the server, e.g. 200
+								// 'text' will be the raw response content
+
+								if (code != 200) {
+									return webcam_error('Fehler beim speichern des Webcam Bildes');
+								}
+
+								if (text !== 'ok') {
+									if (text.match(/\n/)) {
+										return webcam_error('Unbekannter fehler');
+									} else {
+										return webcam_error(text);
+									}
+								}
+							});
+
+						});
+					}
+
+					if (!window.exacam_config.is_teacher) {
+						interval = window.setInterval(snap, 2 * 60 * 1000);
+						snap();
+					}
+				});
+
+				Webcam.on('error', function (err) {
+					webcam_error(err);
+				});
+			}
 		}
 	});
 }();
