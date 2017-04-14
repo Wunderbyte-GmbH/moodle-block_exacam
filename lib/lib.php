@@ -40,6 +40,7 @@ function block_exacam_is_teacher($context = null) {
 	return has_capability('mod/quiz:addinstance', $context);
 }
 
+/*
 function block_exacam_get_active_cmids() {
 	$active_cmids = trim(get_config('block_exacam', 'active_cmids'), ',');
 	if ($active_cmids) {
@@ -67,6 +68,12 @@ function block_exacam_set_cmid_active_state($cmid, $active) {
 
 	set_config('active_cmids', join(',', $active_cmids), 'block_exacam');
 }
+*/
+
+function block_exacam_cmid_is_active($cm) {
+	global $DB;
+	return $DB->record_exists('quiz', ['useexacam' => 1, 'id' => $cm->instance]);
+}
 
 function block_exacam_print_config($cm) {
 	$config = [
@@ -82,4 +89,22 @@ function block_exacam_print_config($cm) {
 		</script>
 		<?php
 	});
+}
+
+function block_exacam_install_or_update() {
+	global $DB;
+
+	$dbman = $DB->get_manager();
+
+	// Define field periodid to be added to block_exastudclass
+	$table = new xmldb_table('quiz');
+	$field = new xmldb_field('useexacam', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'showuserpicture' );
+
+	// Conditionally launch add field
+	if (!$dbman->field_exists($table, $field)) {
+		$dbman->add_field($table, $field);
+
+		// not needed: dbman resets the cache already
+		// purge_all_caches();
+	}
 }

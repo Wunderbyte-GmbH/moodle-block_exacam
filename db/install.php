@@ -1,9 +1,9 @@
 <?php
-// This file is part of Exabis Quiz Camera
+// This file is part of Exabis Student Review
 //
-// (c) 2017 GTN - Global Training Network GmbH <office@gtn-solutions.com>
+// (c) 2016 GTN - Global Training Network GmbH <office@gtn-solutions.com>
 //
-// Exabis Competence Grid is free software: you can redistribute it and/or modify
+// Exabis Student Review is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
@@ -17,10 +17,9 @@
 //
 // This copyright notice MUST APPEAR in all copies of the script!
 
-defined('MOODLE_INTERNAL') || die();
+require_once __DIR__.'/../inc.php';
 
-$plugin->component = 'block_exacam';
-$plugin->release = '0.0.1';
-$plugin->version   = 2017041300;
-$plugin->requires  = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
+// called when installing a plugin
+function xmldb_block_exacam_install() {
+	block_exacam_install_or_update();
+}

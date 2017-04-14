@@ -51,7 +51,7 @@ call_user_func(function() {
 
 	$wwwroot = preg_replace('!^[^/]+://[^/]+!', '', $CFG->wwwroot);
 	$self = str_replace($wwwroot, '', $_SERVER['PHP_SELF']);
-	if (strpos($self, '/mod/quiz/') == 0 || strpos($self, '/mod/exacam/') == 0) {
+	if (strpos($self, '/mod/quiz/') === 0 || strpos($self, '/mod/exacam/') == 0) {
 		// $CFG->additionalhtmlfooter = new block_exacam_footer($CFG->additionalhtmlfooter);
 
 		if ($PAGE) {
@@ -145,4 +145,23 @@ call_user_func(function() {
 			});
 		}
 	}
+
+	/*
+	if (strpos($self, '/course/modedit.php') === 0) {
+		$add    = optional_param('add', '', PARAM_ALPHA);     // module name
+		$update = optional_param('update', 0, PARAM_INT);
+
+		$addtoform = false;
+		if ($add === 'quiz') {
+			$addtoform = true;
+		} elseif ($update) {
+		    $cm = get_coursemodule_from_id('', $update, 0, false, MUST_EXIST);
+		    if ($cm && $cm->modname === 'quiz') {
+		    	$addtoform = true;
+			}
+		}
+
+		var_dump($addtoform);
+	}
+	*/
 });

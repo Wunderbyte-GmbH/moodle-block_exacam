@@ -107,6 +107,7 @@
 			var $container = $('#mod_quiz_navblock .content');
 
 			if (window.exacam_config.is_teacher) {
+				/*
 				var v = window.exacam_config.active ? 'Webcam deaktivieren' : 'Webcam aktivieren';
 				$button = $('<input type="button" value="' + v + '"/>');
 				$container.append($button);
@@ -117,6 +118,7 @@
 						+ '&cmid=' + window.exacam_config.cmid
 						+ '&back=' + encodeURI(document.location.href);
 				});
+				*/
 
 				if (window.exacam_config.active) {
 					$button = $('<input type="button" value="Bilder anzeigen"/>');
