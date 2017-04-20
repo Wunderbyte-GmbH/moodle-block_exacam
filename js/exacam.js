@@ -138,24 +138,26 @@
 		}
 
 		if (window.exacam_config.active) {
-			// remove all moodle event handlers (eg. popup "dieses quiz hat ein zeitlimit")
-			$('form[action*="startattempt.php"]').html($('form[action*="startattempt.php"]').html());
+			if (!window.exacam_config.is_teacher) {
+				// remove all moodle event handlers (eg. popup "dieses quiz hat ein zeitlimit")
+				$('form[action*="startattempt.php"]').html($('form[action*="startattempt.php"]').html());
 
-			$('form[action*="startattempt.php"]').submit(function (e) {
-				e.preventDefault();
+				$('form[action*="startattempt.php"]').submit(function (e) {
+					e.preventDefault();
 
-				var form = this;
-				var popup;
+					var form = this;
+					var popup;
 
-				window.exacam_webcamtest_finished = function () {
-					popup.justHide();
-					form.submit();
-				};
+					window.exacam_webcamtest_finished = function () {
+						popup.justHide();
+						form.submit();
+					};
 
-				popup = block_exacam.popup_iframe({
-					url: M.cfg.wwwroot + '/blocks/exacam/quizstart.php?cmid=' + block_exacam.get_param('id')
+					popup = block_exacam.popup_iframe({
+						url: M.cfg.wwwroot + '/blocks/exacam/quizstart.php?cmid=' + block_exacam.get_param('id')
+					});
 				});
-			});
+			}
 
 			if ($('body#page-mod-quiz-attempt').length) {
 				var interval;
@@ -168,9 +170,9 @@
 				}
 
 				Webcam.set({
-					width: 100,
-					height: 100,
-					dest_width: 640,
+					width: 128,
+					height: 96,
+						dest_width: 640,
 					dest_height: 480,
 					image_format: 'jpeg',
 					jpeg_quality: 85,
