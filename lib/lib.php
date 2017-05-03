@@ -79,7 +79,7 @@ function block_exacam_print_config($cm) {
 	$config = [
 		'cmid' => $cm->id,
 		'active' => block_exacam_cmid_is_active($cm),
-		'is_teacher' => block_exacam_is_teacher(),
+		'is_teacher' => block_exacam_is_teacher($cm->course),
 	];
 
 	register_shutdown_function(function() use ($config) {

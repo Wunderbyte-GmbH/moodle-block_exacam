@@ -140,7 +140,10 @@
 		if (window.exacam_config.active) {
 			if (!window.exacam_config.is_teacher) {
 				// remove all moodle event handlers (eg. popup "dieses quiz hat ein zeitlimit")
-				$('form[action*="startattempt.php"]').html($('form[action*="startattempt.php"]').html());
+				$('form[action*="startattempt.php"]').each(function () {
+					$(this).after($(this).clone());
+					$(this).remove();
+				});
 
 				$('form[action*="startattempt.php"]').submit(function (e) {
 					e.preventDefault();
@@ -172,7 +175,7 @@
 				Webcam.set({
 					width: 128,
 					height: 96,
-						dest_width: 640,
+					dest_width: 640,
 					dest_height: 480,
 					image_format: 'jpeg',
 					jpeg_quality: 85,
