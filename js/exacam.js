@@ -139,27 +139,34 @@
 
 		if (window.exacam_config.active) {
 			if (!window.exacam_config.is_teacher) {
-				// remove all moodle event handlers (eg. popup "dieses quiz hat ein zeitlimit")
-				$('form[action*="startattempt.php"]').each(function () {
-					$(this).after($(this).clone());
-					$(this).remove();
-				});
-
-				$('form[action*="startattempt.php"]').submit(function (e) {
-					e.preventDefault();
-
-					var form = this;
-					var popup;
-
-					window.exacam_webcamtest_finished = function () {
-						popup.justHide();
-						form.submit();
-					};
-
-					popup = block_exacam.popup_iframe({
-						url: M.cfg.wwwroot + '/blocks/exacam/quizstart.php?cmid=' + block_exacam.get_param('id')
+				function fix_form() {
+					// remove all moodle event handlers (eg. popup "dieses quiz hat ein zeitlimit")
+					$('form[action*="startattempt.php"]').each(function () {
+						$(this).after($(this).clone());
+						$(this).remove();
 					});
-				});
+
+					$('form[action*="startattempt.php"]').submit(function (e) {
+						e.preventDefault();
+
+						var form = this;
+						var popup;
+
+						window.exacam_webcamtest_finished = function () {
+							popup.justHide();
+							form.submit();
+						};
+
+						popup = block_exacam.popup_iframe({
+							url: M.cfg.wwwroot + '/blocks/exacam/quizstart.php?cmid=' + block_exacam.get_param('id')
+						});
+					});
+				}
+
+				fix_form();
+				window.setTimeout(fix_form, 500);
+				window.setTimeout(fix_form, 1000);
+				window.setTimeout(fix_form, 1500);
 			}
 
 			if ($('body#page-mod-quiz-attempt').length) {
