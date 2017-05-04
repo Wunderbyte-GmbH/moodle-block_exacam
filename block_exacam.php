@@ -35,7 +35,7 @@ class block_exacam extends block_list {
 	}
 
 	function has_config() {
-		return true;
+		return false;
 	}
 
 	function instance_allow_config() {

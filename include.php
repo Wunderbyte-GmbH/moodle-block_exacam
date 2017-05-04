@@ -131,18 +131,20 @@ call_user_func(function() {
 				return;
 			}
 
-			// während dem quiz:
-			// page-content nur zeigen, wenn js aktiv ist
-			ob_start(function($output) {
-				$output = str_replace('</head>',
-					'<style>
-						#page-content{
-							display: none;
-						}
-					</style></head>', $output);
+			if (!block_exacam_is_teacher($attemptobj->get_cm()->course)) {
+				// während dem quiz:
+				// page-content nur zeigen, wenn js aktiv ist
+				ob_start(function($output) {
+					$output = str_replace('</head>',
+						'<style>
+							#page-content{
+								display: none;
+							}
+						</style></head>', $output);
 
-				return $output;
-			});
+					return $output;
+				});
+			}
 		}
 	}
 

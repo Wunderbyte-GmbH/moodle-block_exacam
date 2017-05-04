@@ -196,42 +196,48 @@
 
 					$('#page-content').show();
 
-					function snap() {
-						console.log('snap');
-						Webcam.snap(function (data_uri) {
-							// snap complete, image data is in 'data_uri'
-
-							console.log('upload');
-							Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/exacam/upload.php?cmid=' + block_exacam.body_param('cmid'), function (code, text) {
-								// Upload complete!
-								// 'code' will be the HTTP response code from the server, e.g. 200
-								// 'text' will be the raw response content
-
-								if (code != 200) {
-									return webcam_error('Fehler beim speichern des Webcam Bildes');
-								}
-
-								if (text !== 'ok') {
-									if (text.match(/\n/)) {
-										return webcam_error('Unbekannter fehler');
-									} else {
-										return webcam_error(text);
-									}
-								}
-							});
-
-						});
-					}
-
 					if (!window.exacam_config.is_teacher) {
+						function snap() {
+							console.log('snap');
+							Webcam.snap(function (data_uri) {
+								// snap complete, image data is in 'data_uri'
+
+								console.log('upload');
+								Webcam.upload(data_uri, M.cfg.wwwroot + '/blocks/exacam/upload.php?cmid=' + block_exacam.body_param('cmid'), function (code, text) {
+									// Upload complete!
+									// 'code' will be the HTTP response code from the server, e.g. 200
+									// 'text' will be the raw response content
+
+									if (code != 200) {
+										return webcam_error('Fehler beim speichern des Webcam Bildes');
+									}
+
+									if (text !== 'ok') {
+										if (text.match(/\n/)) {
+											return webcam_error('Unbekannter fehler');
+										} else {
+											return webcam_error(text);
+										}
+									}
+								});
+
+							});
+						}
+
 						interval = window.setInterval(snap, 2 * 60 * 1000);
 						snap();
 					}
 				});
 
-				Webcam.on('error', function (err) {
-					webcam_error(err);
-				});
+				if (!window.exacam_config.is_teacher) {
+					Webcam.on('error', function (err) {
+						webcam_error(err);
+					});
+				} else {
+					Webcam.on('error', function (err) {
+						// for teachers: no error, just ignore no webcam
+					});
+				}
 			}
 		}
 	});
