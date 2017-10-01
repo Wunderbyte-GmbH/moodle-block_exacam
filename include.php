@@ -137,7 +137,7 @@ call_user_func(function() {
 				ob_start(function($output) {
 					$output = str_replace('</head>',
 						'<style>
-							#page-content{
+							#region-main {
 								display: none;
 							}
 						</style></head>', $output);

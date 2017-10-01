@@ -180,8 +180,8 @@
 				}
 
 				Webcam.set({
-					width: 128,
-					height: 96,
+					width: 240,
+					height: 180,
 					dest_width: 640,
 					dest_height: 480,
 					image_format: 'jpeg',
@@ -194,7 +194,7 @@
 					// camera is live, showing preview image
 					// (and user has allowed access)
 
-					$('#page-content').show();
+					$('#region-main').show();
 
 					if (!window.exacam_config.is_teacher) {
 						function snap() {
