@@ -241,4 +241,11 @@
 			}
 		}
 	});
+
+	// moodle 3.5 uses require.js, which lazyloads another jquery instance
+	// so we have to remember disablescroll and add it again
+	var disablescroll = $.fn.disablescroll;
+	require(['jquery'], function($) {
+		$.fn.disablescroll = disablescroll;
+	});
 }();

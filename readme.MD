@@ -1,6 +1,8 @@
 
 how to install:
 
+* copy this plugin to the moodle/blocks directory
+
 * add the code below to the bottom of your moodle/config.php
     ```php
     require __DIR__.'/blocks/exacam/include.php';
