@@ -17,7 +17,7 @@
 //
 // This copyright notice MUST APPEAR in all copies of the script!
 
-if (@constant('ABORT_AFTER_CONFIG') || @constant('AJAX_SCRIPT')) {
+if ( (defined('ABORT_AFTER_CONFIG') && constant('ABORT_AFTER_CONFIG')) || (defined('AJAX_SCRIPT') && constant('AJAX_SCRIPT')) ) {
 	// for javascript.php etc don't load the webcam plugin
 	return;
 }
