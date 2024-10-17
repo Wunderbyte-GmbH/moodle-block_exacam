@@ -54,18 +54,13 @@ class block_exacam extends block_list {
 		$quiz = $this->page->cm && isset($quizzes[$this->page->cm->id]) ? $quizzes[$this->page->cm->id] : null;
 
 		if (block_exacam_is_teacher()) {
-			/*
-			$icon = '<img src="'.$OUTPUT->pix_url('i/settings').'" class="icon" alt="" />';
-			$this->content->items[] = '<a href="'.$CFG->wwwroot.'/blocks/exacam/quizshots.php?courseid='.$COURSE->id.'">'.$icon.'Webcambilder anzeigen'.'</a>';
-			*/
-
 			if ($quiz) {
 				$urlExtra = '&quizid='.$quiz->id;
 			} else {
 				$urlExtra = '';
 			}
 
-			$icon = '<img src="'.$OUTPUT->pix_url('i/users').'" class="icon" alt="" />';
+			$icon = html_writer::img($OUTPUT->image_url('i/users')->out(false), "img", ['class' => 'icon']);
 			$this->content->items[] = '<a href="'.$CFG->wwwroot.'/blocks/exacam/quizshots.php?courseid='.$COURSE->id.$urlExtra.'">'.$icon.'Webcambilder anzeigen'.'</a>';
 			$this->content->items[] = '<a href="'.$CFG->wwwroot.'/blocks/exacam/quizshots.php?courseid='.$COURSE->id.'&quizstartonly=true'.$urlExtra.'">'.$icon.'nur Quizstartbilder anzeigen'.'</a>';
 			$this->content->items[] = '<a href="'.$CFG->wwwroot.'/blocks/exacam/quizshots.php?courseid='.$COURSE->id.'&idoverview=true'.$urlExtra.'">'.$icon.'Quizstartbilder Übersicht'.'</a>';
